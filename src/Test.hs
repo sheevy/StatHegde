@@ -10,5 +10,8 @@ import Numeric.GSL.Minimization
 
 x = runReader (upInDigital sampleSingleBarrierDigital) sampleEquity
 
+y = runReader (upInCall sampleSingleBarrierCall) sampleEquity
+
 main = do
   print x
+  print y
