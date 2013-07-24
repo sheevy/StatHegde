@@ -22,8 +22,8 @@ data SingleBarrierDigital =
   , _expiry1 :: Double
   }
 
-data SingleBarrierCall =
-  SingleBarrierCall
+data SingleBarrierStrike =
+  SingleBarrierStrike
   { _barrier2 :: Double
   , _expiry2  :: Double
   , _strike2  :: Double
@@ -40,10 +40,10 @@ data DoubleBarrier =
 makeLenses ''Market
 makeLenses ''Equity
 makeLenses ''SingleBarrierDigital
-makeLenses ''SingleBarrierCall
+makeLenses ''SingleBarrierStrike
 makeLenses ''DoubleBarrier
 
-forgetStrike :: SingleBarrierCall -> SingleBarrierDigital
+forgetStrike :: SingleBarrierStrike -> SingleBarrierDigital
 forgetStrike option =
   SingleBarrierDigital
   { _barrier = view barrier2 option
