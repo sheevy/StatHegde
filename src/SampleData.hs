@@ -40,10 +40,25 @@ sampleSingleBarrierDigital =
   , _barrier = 120
   }
 
-sampleSingleBarrierCall :: SingleBarrierCall
+sampleSingleBarrierDigital2 :: SingleBarrierDigital
+sampleSingleBarrierDigital2 =
+  SingleBarrierDigital
+  { _expiry1 = 1.0
+  , _barrier = 90
+  }
+
+sampleSingleBarrierCall :: SingleBarrierStrike
 sampleSingleBarrierCall =
-  SingleBarrierCall
+  SingleBarrierStrike
   { _expiry2  = 1.0
   , _barrier2 = 120
   , _strike2  = 100
   }
+
+sampleSingleBarrierCall2 :: SingleBarrierStrike
+sampleSingleBarrierCall2 =
+  SingleBarrierStrike
+  { _expiry2  = 1.0
+  , _barrier2 = 80
+  , _strike2  = 100
+  }  

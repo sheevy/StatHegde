@@ -14,7 +14,7 @@ minimize f a b =
   (head s, (flipud p) @@> (0,1))
   where
     fBounded [x] = bound f a b x
-    mid = (a+b)/2
+    mid = (a+b)/2/(1+eps)
     r = (b-a)/2
     (s, p) = M.minimize M.NMSimplex2 eps 1000 [r] fBounded [mid]
 
