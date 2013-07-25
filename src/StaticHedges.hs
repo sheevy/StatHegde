@@ -49,4 +49,17 @@ downInDigital option =
     let f k = (blackScholes False s k t 0.0 v) / (k - b)
     return $ minimize f b (10*b) --FIXME: hardcoded value of 10 (should be infinity)
 
-downInCall = undefined
+downInCall :: SingleBarrierStrike -> Reader Equity Double
+downInCall option =
+  let b = view barrier2 option in
+  let k = view strike2 option in
+  let t = view expiry2 option in
+  do
+    spot <- asks $ view spot
+    v <- asks $ view sigma
+    let put d = (d - k)/(d - b) * blackScholes False spot b t 0.0 v
+    let call d = (k - b)/(d - b) * blackScholes True spot d t 0.0 v
+    let f d = put d + call d
+    let min = minimize f k (10*k)
+    return $ snd min
+
