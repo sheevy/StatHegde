@@ -20,6 +20,7 @@ data Grid =
 
 makeLenses ''Grid
 
+-- FIXME: fit the grid to equity spot
 makeDBGrid :: Equity -> DoubleBarrier -> Int -> Grid
 makeDBGrid equity db nS =
   Grid s dS nS t dt nt
@@ -39,8 +40,7 @@ call :: Double -> Double -> Double
 call k s = max 0.0 (s-k)
 
 data Data =
-  Data { _market :: Market
-       , _equity :: Equity
+  Data { _equity :: Equity
        , _grid   :: Grid
        } deriving Show
 
@@ -49,43 +49,36 @@ makeLenses ''Data
 ph :: Vector Double -> Int -> Reader Data Double
 ph v n = do
   let get = asks . view
-  r' <- get $ market.r
   dt <- get $ grid.dt
   dS <- get $ grid.dS
   return $ phi' v n
     where
       phi' v n | n == 0               = 0
                | n == U.length v - 1  = 0
---               | otherwise            = v!n - dt'*theta
---  m <- get $ market.r
---  return v
 
-phi :: Market -> Equity -> Grid -> Vector Double -> Int -> Double
-phi market equity grid v n = phi' v n
+phi :: Equity -> Grid -> Vector Double -> Int -> Double
+phi equity grid v n = phi' v n
   where
     phi' v n | n == 0               = 0
              | n == U.length v - 1  = 0
              | otherwise            = v!n - dt'*theta
                                       
-    r'    = view r market
     dt'   = view dt grid
     dS'   = view dS grid
     spot' = view s grid + (fromIntegral n) * dS'
     vol'  = view sigma equity
     delta = (v!(n+1) - v!(n-1)) / 2 / dS'
     gamma = (v!(n+1) - 2*v!n + v!(n-1)) / dS' / dS'
-    theta = -0.5*vol'*vol'*spot'*spot'*gamma - r'*spot'*delta + r'*v!n
+    theta = -0.5*vol'*vol'*spot'*spot'*gamma -- since r == 0
 
-oneStep :: Market -> Equity -> Grid -> Vector Double -> Vector Double
-oneStep m e g v = U.map (phi m e g v) (enumFromN 0 (U.length v))
+oneStep :: Equity -> Grid -> Vector Double -> Vector Double
+oneStep e g v = U.map (phi e g v) (enumFromN 0 (U.length v))
 
-allSteps :: Market -> Equity -> Grid -> Int -> Vector Double -> Vector Double
-allSteps m e g = allSteps' (oneStep m e g) -- (nt sampleGrid)
+allSteps :: Equity -> Grid -> Int -> Vector Double -> Vector Double
+allSteps e g = allSteps' (oneStep e g) -- (nt sampleGrid)
   where
     allSteps' f n v | n == 0 = v
                     | n >= 1 = allSteps' f (n-1) (f v)
-
--- musze napisać ceny z góry dla wszystkich opcji z jedną i dwiema barierami
 
 
 

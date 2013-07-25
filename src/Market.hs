@@ -4,10 +4,10 @@ module Market where
 
 import Control.Lens
 
-data Market =
-  Market
-  { _r :: Double
-  } deriving Show
+--data Market =
+--  Market
+--  { _r :: Double
+--  } deriving Show
 
 data Equity =
   Equity
@@ -37,7 +37,7 @@ data DoubleBarrier =
   , _expiry      :: Double
   } deriving Show
 
-makeLenses ''Market
+--makeLenses ''Market
 makeLenses ''Equity
 makeLenses ''SingleBarrierDigital
 makeLenses ''SingleBarrierStrike

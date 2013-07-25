@@ -6,8 +6,8 @@ import Data.Vector.Unboxed as U
 import Market
 import PDE
 
-sampleMarket :: Market
-sampleMarket = Market 0
+--sampleMarket :: Market
+--sampleMarket = Market 0
 
 sampleEquity :: Equity
 sampleEquity = Equity 100 0.2
@@ -16,7 +16,7 @@ sampleDB :: DoubleBarrier
 sampleDB = DoubleBarrier 100 80 120 1
 
 n :: Int
-n = 250
+n = 100
 
 sampleGrid :: Grid
 sampleGrid = makeDBGrid sampleEquity sampleDB n
